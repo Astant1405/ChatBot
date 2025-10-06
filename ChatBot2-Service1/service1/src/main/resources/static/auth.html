@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход / Регистрация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🔐 Авторизация</h1>
+
+    <div class="auth-forms">
+        <div class="form-container">
+            <h3>Регистрация</h3>
+            <div>
+                <input type="text" id="regUsername" placeholder="Имя пользователя">
+                <input type="password" id="regPassword" placeholder="Пароль">
+                <button onclick="handleRegisterButton()">Зарегистрироваться</button>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h3>Вход</h3>
+            <div>
+                <input type="text" id="loginUsername" placeholder="Имя пользователя">
+                <input type="password" id="loginPassword" placeholder="Пароль">
+                <button onclick="handleLoginButton()">Войти</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="yandex-auth">
+        <button onclick="loginWithYandex()">Войти через Яндекс</button>
+    </div>
+
+    <button onclick="location.href='index.html'">На главную</button>
+
+    <div id="message" class="message"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

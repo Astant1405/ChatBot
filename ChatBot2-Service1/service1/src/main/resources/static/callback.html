@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация Яндекс</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🔐 Обработка авторизации</h1>
+    <div id="message" class="message">Пожалуйста, подождите...</div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    // Вызываем обработку callback при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        handleYandexCallback();
+    });
+</script>
+</body>
+</html>
