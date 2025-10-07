@@ -1,16 +1,17 @@
 package ru.astant.service2.unit;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.client.RestTemplate;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import ru.astant.service2.services.LlmService;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 

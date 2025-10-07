@@ -3,6 +3,7 @@ package ru.astant.service1.controllers;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -94,23 +95,33 @@ public class AuthController {
     public Map<String, Object> yandexCallback(@RequestBody Map<String, String> request) {
         try {
             String code = request.get("code");
+            System.out.println("Received authorization code: " + code); // Логируем код
+
             String token = yandexRegistrationService.getTokenFromYandex(code);
+            System.out.println("Received Yandex token: " + token); // Логируем токен
+
             Map<String, Object> userInfo = yandexRegistrationService.getUserInfoFromYandex(token);
+            System.out.println("Received user info: " + userInfo); // Логируем информацию о пользователе
+
             User user = yandexRegistrationService.creatOrFindUser(userInfo);
+            System.out.println("User created or found: " + user.getUsername()); // Логируем пользователя
+
             String jwt = jwtUtil.generateToken(user.getUsername());
+            System.out.println("Generated JWT token: " + jwt); // Логируем JWT токен
+
             return Map.of(
                     "success", true,
                     "jwt-token", jwt,
                     "username", user.getUsername(),
                     "message", "Вход успешен"
             );
-
         } catch (Exception e) {
+            e.printStackTrace();
             return Map.of(
                     "success", false,
                     "message", "Ошибка при авторизации через Яндекс: " + e.getMessage()
             );
-
         }
     }
+
 }

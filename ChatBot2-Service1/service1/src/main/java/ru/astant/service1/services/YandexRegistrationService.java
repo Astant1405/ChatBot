@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import ru.astant.service1.models.User;
 import ru.astant.service1.repositories.UserRepository;
@@ -14,9 +16,6 @@ import java.util.Map;
 public class YandexRegistrationService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate = new RestTemplate();
-
-    @Value("${yandex.redirect-uri}")
-    private String redirectUri;
 
 
     @Autowired
@@ -30,27 +29,32 @@ public class YandexRegistrationService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        String body = "grant_type=authorization_code" +
-                "&code=" + code +
-                "&client_id=3621852775f64452a26c5cec19e36c29" +
-                "&client_secret=ae425a906ad44da496bb1a511fe9d41e" +
-                "&redirect_uri=" + redirectUri;
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("code", code);
+        params.add("client_id", "3621852775f64452a26c5cec19e36c29");
+        params.add("client_secret", "ae425a906ad44da496bb1a511fe9d41e");
+        params.add("redirect_uri", "http://localhost:8080/api/auth/yandex/callback");
 
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        System.out.println("Requesting token with code: " + code); // Добавьте логирование
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+            System.out.println("Yandex token response: " + response.getStatusCode() + " - " + response.getBody());
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return (String) response.getBody().get("access_token");
             } else {
                 throw new RuntimeException("Не удалось получить токен от Яндекса: " + response.getBody());
             }
-
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка при обращении к Яндекс OAuth: " + e.getMessage(), e);
+            System.err.println("Error getting token from Yandex: " + e.getMessage());
+            throw new RuntimeException("Ошибка при получении токена: " + e.getMessage(), e);
         }
     }
+
 
 
     public Map<String, Object> getUserInfoFromYandex(String accessToken) {
